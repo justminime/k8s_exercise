@@ -1,0 +1,19 @@
+apiVersion: autoscaling/v2beta1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: users-api-autoscaler
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: users-api
+  minReplicas: 2
+  maxReplicas: 10
+  metrics:
+  - type: External
+    external:
+      metricName: network_latency
+      metricSelector:
+        matchLabels:
+          metric_type: network_latency
+      targetValue: 0.5

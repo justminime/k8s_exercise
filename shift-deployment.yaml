@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: shifts-api
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: shifts-api
+  template:
+    metadata:
+      labels:
+        app: shifts-api
+    spec:
+      containers:
+      - name: usshiftsers-api
+        image: myregistry/shift-api:latest
+        ports:
+        - containerPort: 3000
+        resources:
+          requests:
+            cpu: "100m"
+            memory: "256Mi"
+          limits:
+            cpu: "500m"
+            memory: "512Mi"
+        env:
+        - name: MONGODB_URI
+          value: mongodb://mongodb/shifts
+      imagePullSecrets:
+      - name: myregistry-secret
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+      maxSurge: 1
+  minReadySeconds: 30
+---
+apiVersion: autoscaling/v2beta1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: shifts-api-autoscaler
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: shifts-api
+  minReplicas: 3
+  maxReplicas: 10
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      targetAverageUtilization: 70

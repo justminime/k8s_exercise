@@ -1,0 +1,4 @@
+image:
+  repository: my-registry/shift-api
+  tag: staging
+replicas: 2
