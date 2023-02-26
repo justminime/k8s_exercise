@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 
 const app = express();
 
-mongoose.connect('mongodb://localhost:27017/users', {
+mongoose.connect('mongodb://mongodb/users', {
   useNewUrlParser: true,
   useUnifiedTopology: true
 });

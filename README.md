@@ -30,6 +30,14 @@ This container runs 3 replicas pod of a small API that returns users from a data
     kubectl apply -f shift-deployment.yaml
     ```
 
+3. deploy mongodb
+This container runs 1 replicas pod of mongoDB.
+
+    ```bash
+    kubectl apply -f db-deployment.yaml
+    ```
+
+
 ## 2.) For the best user experience auto scale this service when the average CPU reaches 70%.
 
 1.  add resources limit in order to calculate the 70%

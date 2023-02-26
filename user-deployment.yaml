@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: users-api
-        image: myregistry/user-api:latest
+        image: ereznyx/user-api:latest
         ports:
         - containerPort: 3000
         resources:
@@ -36,7 +36,40 @@ spec:
       maxSurge: 1
   minReadySeconds: 30
 ---
-apiVersion: autoscaling/v2beta1
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: users-db
+  labels:
+    app: users-db
+spec:
+  selector:
+    matchLabels:
+      app: users-db
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: users-db
+    spec:
+      containers:
+      - name: users
+        image: mongo:latest
+        ports:
+        - containerPort: 27017
+        env:
+            - name: MONGO_INITDB_DATABASE
+              value: "users"
+            - name: MONGODB_URI
+              value: mongodb://mongodb/users
+        volumeMounts:
+        - name: mongo-data
+          mountPath: /data/db
+      volumes:
+      - name: mongo-data
+        emptyDir: {}
+---
+apiVersion: autoscaling/v2beta2
 kind: HorizontalPodAutoscaler
 metadata:
   name: users-api-autoscaler
@@ -51,4 +84,6 @@ spec:
   - type: Resource
     resource:
       name: cpu
-      targetAverageUtilization: 70
+      target:
+        type: Utilization
+        averageUtilization: 70
