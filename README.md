@@ -128,11 +128,22 @@ roleRef:
 
 
 ## Bonus: How would you apply the configs to multiple environments (staging vs production)?
-By using Helm charts I can apply deferent variables to different environments.
+By using Helm charts I can apply deferent variables to different environments. (Helm Folder)
 
+Build Helm with replicas in values 2
 ```bash
-helm upgrade --install shifts-api-staging shifts-api --values values-staging.yaml
-helm upgrade --install shifts-production shifts-api --values values-production.yaml
+cd helm
+helm package .
+```
+
+Deploy 2 replicas using helm
+```bash
+helm install users-api users-api-1.0.0.tgz 
+```
+
+Deploying with production variable meaning 5 replicas
+```bash
+helm upgrade users-api ./ --values ../values-prod.yaml 
 ```
 ## Bonus: How would you auto-scale the deployment based on network latency instead of CPU?
 In order to do this I need to create the custom metric 'network_latency" by using a third service like Prometheus.

@@ -1,4 +1,0 @@
-image:
-  repository: my-registry/shift-api
-  tag: production
-replicas: 5

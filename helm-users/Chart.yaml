@@ -1,0 +1,4 @@
+apiVersion: v2
+name: users-api
+description: A Helm chart for deploying user-api
+version: 1.0.0
