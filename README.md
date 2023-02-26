@@ -2,7 +2,7 @@
 
 ## Build small API programs that connect to db
 
-1. I copied a small node js program (done by chat-gpt) for users and shifts.
+1. I copied a small node js program for users and shifts.
 2. wrapped it by Dockerfile
 3. build user-api docker image
     ```bash
