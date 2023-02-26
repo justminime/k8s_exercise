@@ -17,24 +17,17 @@
 
 ## 1.) We want to deploy two containers that scale independently from one another.
 1. deploy user-api
-This container runs 2 replicas pod of a small API that returns users from a database.
+This container runs 2 replicas pod of a small API that returns users from a database. and 1 isolated users mongodb.
 
     ```bash
     kubectl apply -f user-deployment.yaml
     ```
 
 2. deploy shift-api
-This container runs 3 replicas pod of a small API that returns users from a database.
+This container runs 3 replicas pod of a small API that returns users from a database. and 1 isolated shifts mongodb
 
     ```bash
     kubectl apply -f shift-deployment.yaml
-    ```
-
-3. deploy mongodb
-This container runs 1 replicas pod of mongoDB.
-
-    ```bash
-    kubectl apply -f db-deployment.yaml
     ```
 
 
@@ -72,7 +65,9 @@ spec:
   - type: Resource
     resource:
       name: cpu
-      targetAverageUtilization: 70
+      target:
+        type: Utilization
+        averageUtilization: 70
 ```
 
 ## 3.) Ensure the deployment can handle rolling deployments and rollbacks.
@@ -91,12 +86,12 @@ allow a rolling update procedure which replace one by one so only one unavailabl
 
 user can rollout by running
 ```bash
-kubectl rollout
+kubectl rollout restart deployment/users-api
 ```
 and rollback by running (will return to previous version)
 
 ```bash
-kubectl rollout undo
+kubectl rollout undo deployment/shifts-api
 ```
 ## 4.) Your development team should not be able to run certain commands on your k8s cluster, but you want them to be able to deploy and roll back. What types of IAM controls do you put in place?
 

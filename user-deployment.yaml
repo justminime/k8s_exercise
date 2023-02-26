@@ -26,7 +26,7 @@ spec:
             memory: "512Mi"
         env:
         - name: MONGODB_URI
-          value: mongodb://mongodb/users
+          value: mongodb://users-db/users
       imagePullSecrets:
       - name: myregistry-secret
   strategy:
@@ -53,7 +53,7 @@ spec:
         app: users-db
     spec:
       containers:
-      - name: mongodb
+      - name: users-db
         image: mongo:latest
         ports:
         - containerPort: 27017
@@ -61,7 +61,7 @@ spec:
             - name: MONGO_INITDB_DATABASE
               value: "users"
             - name: MONGODB_URI
-              value: mongodb://mongodb/users
+              value: mongodb://users-db/users
         volumeMounts:
         - name: mongo-data
           mountPath: /data/db
